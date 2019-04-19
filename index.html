@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>Tic-Tac-Toe</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+
+            
+/*            .fixed-bg {
+                background-image: url("digital.jpg");
+                background-attachment: fixed;
+                background-position: center;
+                background-repeat: no-repeat;
+                background-size: cover;*/
+                
+            body{
+                overflow: hidden;
+                font-family: "Comic Sans MS", cursive, sans-serif; 
+                background-image: url("digital.jpg");
+                background-attachment: fixed;
+                background-position: center;
+                background-repeat: no-repeat;
+                background-size: cover;
+                color: white;
+                /*color: black;*/
+            }
+            .score{
+                color: white;
+                background-color: black;
+                border: solid white;
+                border-width: thin;
+            }
+            .table {
+                display: Table;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            .row {
+                display: table-row;
+            }
+            .cell {
+                display: table-cell; 
+                border: solid white;
+                border-width: thin;
+                padding-left: 5px;
+                padding-right: 5px;
+                height: 100px;
+                width: 100px;
+                text-align: center;
+                vertical-align: middle;
+                margin: 5px;
+                background-color: black;
+                color: white;
+                font-size: 56px;
+                font-weight: bold;
+            }
+            .cell:hover{
+                background-color: #C9B2D9;
+            }
+        </style>
+        <script>
+            var currentMarker = "X";
+            var scoreX = 0;
+            var scoreO = 0;
+            var score = 0;
+            var id;
+            var winsArray = [7, 56, 448, 73, 146, 292, 273, 84];
+            var player1name = "";
+            var player2name = "";
+            var player1total = 0;
+            var player2total = 0;
+            var catGameTotal = 0;
+            var playerX = "";
+            var winner = false;
+            var currentPlayer = "";
+
+            function start()
+            {
+                player1name = prompt("Enter First Player's Name:", "Player 1");
+                player2name = prompt("Enter Second Player's Name:", "Player 2");
+                playerX = player1name; //set first player
+                document.getElementById("player").innerHTML = playerX + " Choose a Square.";
+                document.getElementById("player1").innerHTML = player1name;
+                document.getElementById("player2").innerHTML = player2name;
+                ducument.getElementById("player1score").innerHTML = player1total;
+                ducument.getElementById("player2score").innerHTML = player2total;
+            }
+
+            function playerMoved(id, value)
+            {
+                if (id.innerHTML === "")
+                {
+                    if (currentMarker === "X")
+                    {
+                        id.innerHTML = "X";
+                        scoreX = scoreX + value;
+                        check4Winner(scoreX);
+
+                        if (winner === false)
+                        {
+                            switchPlayer();
+                        }
+                    } else
+                    {
+                        id.innerHTML = "O";
+                        scoreO = scoreO + value;
+                        check4Winner(scoreO);
+
+                        if (winner === false)
+                        {
+                            switchPlayer();
+                        }
+                    }
+                }
+
+                if (winner === true)
+                {
+                    if (playerX === player1name)
+                    {
+                        player1total = player1total + 1;
+//                        alert(player1total);
+                        document.getElementById("player1score").innerHTML = player1total;
+                    } else
+                    {
+                        player2total = player2total + 1;
+//                        alert(player2total);
+                        document.getElementById("player2score").innerHTML = player2total;
+                    }
+                    clearGameBoard();
+                    winner = false;
+                } else
+                {
+                    if (scoreX + scoreO === 511)//cat game
+                    {
+                        catGame();
+                        clearGameBoard();
+                    }
+                }
+            }//PlayerMoved
+
+            function switchPlayer()//change players name on doc
+            {
+                if (currentMarker === "X")
+                {
+                    currentMarker = "O";
+
+                    if (playerX === player1name)
+                    {
+                        playerX = player2name;
+                    } else
+                    {
+                        playerX = player1name;
+                    }
+                } else
+                {
+                    currentMarker = "X";
+
+                    if (playerX === player2name)
+                    {
+                        playerX = player1name;
+                    } else
+                    {
+                        playerX = player2name;
+                    }
+                }
+                document.getElementById("player").innerHTML = playerX + " Choose a Square.";
+            }
+
+            function check4Winner(score)
+            {
+//                alert("check for winner" + score)
+                for (var index = 0; index < winsArray.length; index++)
+                {
+                    if ((winsArray[index] & score) === winsArray[index])
+                    {
+                        winner = true;
+                        alert(playerX + " Won!");
+                        index = 99;
+                    }
+                }
+            }
+            function clearGameBoard()
+            {
+                //clear game board
+
+                scoreO = 0;
+                scoreX = 0;
+                for (var i = 1; i < 257; i = i * 2)
+
+                {
+                    document.getElementById(i).innerHTML = "";
+                    currentMarker = "X";
+                    document.getElementById("player").innerHTML = playerX + " Choose a Square.";
+                }
+            }
+
+            function catGame()
+            {
+                //cat won? add scoreO + scoreX = 511;
+                catGameTotal = catGameTotal + 1;
+                alert("Cat Game!");
+                document.getElementById("cat").innerHTML = catGameTotal;
+            }
+
+        </script>
+    </head>
+    <body onload="start()">
+    <center>
+        <h1>Tic-Tac-Toe</h1>
+        <div>
+            <center>
+                <h2 id="player"></h2>
+            </center>
+        </div>
+    </center>
+    <div class="table">
+        <div class="row">
+            <div class="cell" id="1" style='border-top: none; border-left: none' onclick="playerMoved(this, 1)"></div>
+            <div class="cell" id="2" style="border-top:none" onclick="playerMoved(this, 2)"></div>
+            <div class="cell" id="4" style='border-top: none; border-right: none' onclick="playerMoved(this, 4)"></div>
+        </div>
+        <div class="row">
+            <div class="cell" id="8" style='border-left: none' onclick="playerMoved(this, 8)"></div>
+            <div class="cell" id="16" onclick="playerMoved(this, 16)"></div>
+            <div class="cell" id="32" style='border-right: none' onclick="playerMoved(this, 32)"></div>
+        </div>
+        <div class="row">
+            <div class="cell" style='border-bottom: none; border-left: none' id="64" onclick="playerMoved(this, 64)"></div>
+            <div class="cell" style='border-bottom: none' id="128" onclick="playerMoved(this, 128)"></div>
+            <div class="cell" style='border-bottom: none; border-right: none' id="256" onclick="playerMoved(this, 256)"></div>
+        </div>
+    </div>
+    <center>
+    <table class="score" style="background-color: black; width: 300px">
+        <tbody>
+        <h1>Score:</h1>
+            <tr>
+                <td><div style="float:left"><h2 id="player1"></h2>
+                        <center><h1 id="player1score">0</h1></center></div></td>
+                <td><div style="float:left">
+            <h2>Cat</h2>
+            <center><h1 id="cat">
+                0
+                </h1></center>
+        </div></td>
+                <td><div style="float:left"><h2 id="player2"></h2>
+                        <center><h1 id="player2score">0</h1></center></div></td>
+            </tr>
+        </tbody>
+    </table>
+    </center>
+
+</body>
+</html>
